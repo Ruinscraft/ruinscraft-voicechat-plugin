@@ -109,7 +109,7 @@ public class VCServer extends Thread {
                 .map(p -> clients.get(p.getUniqueId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        
+
         VCSoundPacket soundPacket = new VCSoundPacket(player.getUniqueId(), packet.getData(), packet.getSequenceNumber());
 
         for (VCClient client : closeBy) {
