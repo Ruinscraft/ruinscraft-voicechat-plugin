@@ -31,7 +31,7 @@ public final class PluginMessageUtil {
             PlayerStateMessage playerStateMessage = new PlayerStateMessage();
             PacketDataSerializerReimpl buf = new PacketDataSerializerReimpl(Unpooled.wrappedBuffer(bytes));
             playerStateMessage.fromBytes(buf);
-            playerStateManager.addState(playerStateMessage.getPlayerState());
+            playerStateManager.updateState(playerStateMessage.getPlayerState());
             buf.release();
         });
     }

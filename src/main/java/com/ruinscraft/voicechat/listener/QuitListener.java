@@ -1,6 +1,6 @@
 package com.ruinscraft.voicechat.listener;
 
-import com.ruinscraft.voicechat.player.VCPlayerStateManager;
+import com.ruinscraft.voicechat.VCPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,16 +8,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
-    private VCPlayerStateManager playerStateManager;
+    private VCPlugin vcPlugin;
 
-    public QuitListener(VCPlayerStateManager playerStateManager) {
-        this.playerStateManager = playerStateManager;
+    public QuitListener(VCPlugin vcPlugin) {
+        this.vcPlugin = vcPlugin;
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        playerStateManager.removeState(player.getUniqueId());
+        vcPlugin.getPlayerStateManager().removeState(player.getUniqueId());
+        vcPlugin.getVoiceChatServer().disconnectClient(player.getUniqueId());
     }
 
 }

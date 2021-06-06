@@ -28,10 +28,14 @@ public class JoinListener implements Listener {
             VCServer server = vcPlugin.getVoiceChatServer();
 
             if (player.isOnline() && server.running()) {
+                // Send secret message
                 UUID secret = server.getSecret(player.getUniqueId());
                 VCServerConfig config = server.getConfig();
                 SecretMessage secretMessage = new SecretMessage(secret, config);
                 PluginMessageUtil.sendToClient(vcPlugin, player, secretMessage);
+
+                // Update player states for client and accept player
+                vcPlugin.getPlayerStateManager().acceptPlayer(player);
             }
         }, 2 * 20L);
     }

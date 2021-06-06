@@ -2,8 +2,8 @@ package com.ruinscraft.voicechat.pluginnet.message;
 
 import com.ruinscraft.voicechat.buffer.PacketDataSerializerReimpl;
 import com.ruinscraft.voicechat.player.VCPlayerState;
+import org.apache.commons.lang.NotImplementedException;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,13 +22,7 @@ public class PlayerStatesMessage extends PluginMessage<PlayerStatesMessage> {
 
     @Override
     public PlayerStatesMessage fromBytes(PacketDataSerializerReimpl buf) {
-        playerStates = new HashMap<>();
-        int count = buf.readInt();
-        for (int i = 0; i < count; i++) {
-            VCPlayerState playerState = new VCPlayerState().fromBytes(buf);
-            playerStates.put(playerState.getPlayerId(), playerState);
-        }
-        return this;
+        throw new NotImplementedException("No server implementation");
     }
 
     @Override

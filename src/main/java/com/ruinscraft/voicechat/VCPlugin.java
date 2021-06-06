@@ -34,12 +34,12 @@ public class VCPlugin extends JavaPlugin {
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new QuitListener(playerStateManager), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
 
         PluginMessageUtil.registerChannels(this, playerStateManager);
 
         for (Player player : getServer().getOnlinePlayers()) {
-            playerStateManager.notifyPlayer(player);
+            playerStateManager.acceptPlayer(player);
         }
     }
 
@@ -49,6 +49,7 @@ public class VCPlugin extends JavaPlugin {
 
         for (Player player : getServer().getOnlinePlayers()) {
             playerStateManager.removeState(player.getUniqueId());
+            voiceChatServer.disconnectClient(player.getUniqueId());
         }
 
         if (voiceChatServer != null) {

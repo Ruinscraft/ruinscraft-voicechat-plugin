@@ -6,7 +6,9 @@ import com.ruinscraft.voicechat.pluginnet.message.PlayerStateMessage;
 import com.ruinscraft.voicechat.pluginnet.message.PlayerStatesMessage;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class VCPlayerStateManager {
 
@@ -18,31 +20,27 @@ public class VCPlayerStateManager {
         playerStates = new HashMap<>();
     }
 
-    private void broadcastState(VCPlayerState playerState) {
+    public void broadcastState(VCPlayerState playerState) {
         PlayerStateMessage message = new PlayerStateMessage(playerState);
         vcPlugin.getServer().getOnlinePlayers().forEach(p -> PluginMessageUtil.sendToClient(vcPlugin, p, message));
     }
 
-    public void notifyPlayer(Player player) {
+    public void acceptPlayer(Player player) {
+        VCPlayerState playerState = new VCPlayerState(player.getUniqueId(), false, true);
+        updateState(playerState);
+
+        // Let the newly connected client know about all current player states
         PlayerStatesMessage message = new PlayerStatesMessage(playerStates);
         PluginMessageUtil.sendToClient(vcPlugin, player, message);
-        broadcastState(new VCPlayerState(player.getUniqueId(), false, true));
     }
 
-    public void addState(VCPlayerState playerState) {
+    public void updateState(VCPlayerState playerState) {
         playerStates.put(playerState.getPlayerId(), playerState);
+        broadcastState(playerState);
     }
 
     public void removeState(UUID playerId) {
         playerStates.remove(playerId);
-    }
-
-    public VCPlayerState getState(UUID playerId) {
-        return playerStates.get(playerId);
-    }
-
-    public List<VCPlayerState> getStates() {
-        return new ArrayList<>(playerStates.values());
     }
 
 }

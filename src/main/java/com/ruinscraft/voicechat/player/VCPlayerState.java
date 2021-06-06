@@ -58,6 +58,7 @@ public class VCPlayerState implements PacketDataSerializable<VCPlayerState> {
         buf.writeUUID(playerId);
         buf.writeBoolean(disabled);
         buf.writeBoolean(disconnected);
+        buf.writeBoolean(false); // no groups
     }
 
 }
