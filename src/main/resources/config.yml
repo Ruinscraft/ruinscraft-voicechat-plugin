@@ -1,0 +1,9 @@
+voice-server:
+  bind-address: 0.0.0.0
+  port: 24454 # UDP
+  voice-distance: 32
+  voice-fade-distance: 16
+  opus-application: VOIP # Options: VOIP, AUDIO, RESTRICTED_LOWDELAY
+  mtu-size: 1024
+  keep-alive: 1000
+  groups-enabled: true
