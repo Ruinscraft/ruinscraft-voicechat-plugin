@@ -1,6 +1,7 @@
 package com.ruinscraft.voicechat.server;
 
 import com.ruinscraft.voicechat.VCPlugin;
+import com.ruinscraft.voicechat.hook.CinemaDisplaysHook;
 import com.ruinscraft.voicechat.server.packet.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -102,7 +103,21 @@ public class VCServer extends Thread {
     private void processProximityPacket(Player player, VCMicPacket packet) throws Exception {
         double distance = config.getVoiceDistance();
 
-        List<VCClient> closeBy = vcPlugin.getServer().getOnlinePlayers().stream()
+        final Set<Player> toConsider;
+
+        if (vcPlugin.isUsingCinemaDisplays()) {
+            CinemaDisplaysHook cinemaDisplaysHook = vcPlugin.getCinemaDisplaysHook();
+
+            if (cinemaDisplaysHook.isInTheater(player)) {
+                toConsider = cinemaDisplaysHook.getPlayersInSameTheater(player);
+            } else {
+                toConsider = cinemaDisplaysHook.getPlayersNotInTheater();
+            }
+        } else {
+            toConsider = new HashSet<>(vcPlugin.getServer().getOnlinePlayers());
+        }
+
+        List<VCClient> closeBy = toConsider.stream()
                 .filter(OfflinePlayer::isOnline)
                 .filter(p -> !p.equals(player))
                 .filter(p -> p.getLocation().distance(player.getLocation()) < distance)

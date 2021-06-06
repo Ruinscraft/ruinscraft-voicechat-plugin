@@ -1,5 +1,7 @@
 package com.ruinscraft.voicechat;
 
+import com.ruinscraft.cinemadisplays.CinemaDisplaysPlugin;
+import com.ruinscraft.voicechat.hook.CinemaDisplaysHook;
 import com.ruinscraft.voicechat.listener.JoinListener;
 import com.ruinscraft.voicechat.listener.QuitListener;
 import com.ruinscraft.voicechat.player.VCPlayerStateManager;
@@ -13,6 +15,7 @@ public class VCPlugin extends JavaPlugin {
 
     private VCPlayerStateManager playerStateManager;
     private VCServer voiceChatServer;
+    private CinemaDisplaysHook cinemaDisplaysHook;
 
     public VCPlayerStateManager getPlayerStateManager() {
         return playerStateManager;
@@ -20,6 +23,14 @@ public class VCPlugin extends JavaPlugin {
 
     public VCServer getVoiceChatServer() {
         return voiceChatServer;
+    }
+
+    public boolean isUsingCinemaDisplays() {
+        return cinemaDisplaysHook != null;
+    }
+
+    public CinemaDisplaysHook getCinemaDisplaysHook() {
+        return cinemaDisplaysHook;
     }
 
     @Override
@@ -40,6 +51,11 @@ public class VCPlugin extends JavaPlugin {
 
         for (Player player : getServer().getOnlinePlayers()) {
             playerStateManager.acceptPlayer(player);
+        }
+
+        if (getServer().getPluginManager().getPlugin("CinemaDisplays")
+                instanceof CinemaDisplaysPlugin cinemaDisplaysPlugin) {
+            cinemaDisplaysHook = new CinemaDisplaysHook(this, cinemaDisplaysPlugin);
         }
     }
 
